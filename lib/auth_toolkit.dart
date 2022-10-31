@@ -26,11 +26,14 @@ class AuthRepositoryFactory {
   });
 
   AuthRepository build() {
+    final config =
+        AuthConfig(host: host, clientId: clientId, redirectUri: '$bundleId://');
     final LocalDataSource local = _buildLocalDataSource();
-    final RemoteDataSource remote = _buildRemoteDataSource();
+    final RemoteDataSource remote = _buildRemoteDataSource(config);
     final PkceGenerator pkceGenerator = PkceGenerator();
 
     return AuthRepositoryImpl(
+      config: config,
       local: local,
       remote: remote,
       pkceGenerator: pkceGenerator,
@@ -42,8 +45,7 @@ class AuthRepositoryFactory {
     return LocalDataSourceImpl(storage: storage, bundleId: bundleId);
   }
 
-  RemoteDataSource _buildRemoteDataSource() {
-    final config = AuthConfig(host: host, clientId: clientId, redirectUri: '$bundleId://');
+  RemoteDataSource _buildRemoteDataSource(AuthConfig config) {
     final dioOptions = BaseOptions(
       baseUrl: 'https://$host',
       connectTimeout: 4000,

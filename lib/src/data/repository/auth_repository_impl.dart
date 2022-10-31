@@ -1,3 +1,4 @@
+import 'package:auth_toolkit/src/core/auth_config.dart';
 import 'package:auth_toolkit/src/data/data_source/local_data_source.dart';
 import 'package:auth_toolkit/src/data/data_source/remote_data_source.dart';
 import 'package:auth_toolkit/src/data/model/access_token_model.dart';
@@ -16,13 +17,16 @@ class AuthRepositoryImpl extends AuthRepository {
   final LocalDataSource _local;
   final RemoteDataSource _remote;
   final PkceGenerator _pkceGenerator;
+  final AuthConfig _config;
 
   AuthRepositoryImpl(
       {required LocalDataSource local,
       required RemoteDataSource remote,
-      required PkceGenerator pkceGenerator})
+      required PkceGenerator pkceGenerator,
+      required AuthConfig config})
       : _local = local,
         _remote = remote,
+        _config = config,
         _pkceGenerator = pkceGenerator;
 
   @override
@@ -172,4 +176,7 @@ class AuthRepositoryImpl extends AuthRepository {
     final response = await _remote.loginWithToken(code, verifier);
     await _storeData(response);
   }
+
+  @override
+  AuthConfig get config => _config;
 }
