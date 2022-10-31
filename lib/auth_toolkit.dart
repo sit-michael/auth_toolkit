@@ -9,6 +9,7 @@ import 'package:auth_toolkit/src/domain/repository/auth_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+export './src/core/model/salutation.dart';
 export './src/domain/repository/auth_repository.dart';
 export './src/domain/entity/auth_user.dart';
 export './src/domain/entity/view_type.dart';
@@ -42,8 +43,7 @@ class AuthRepositoryFactory {
   }
 
   RemoteDataSource _buildRemoteDataSource() {
-    final config =
-        AuthConfig(host: host, clientId: clientId, redirectUri: '$bundleId://');
+    final config = AuthConfig(host: host, clientId: clientId, redirectUri: '$bundleId://');
     final dioOptions = BaseOptions(
       baseUrl: 'https://$host',
       connectTimeout: 4000,
