@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:logging/logging.dart';
 
-enum AuthType { login, register }
-
 class AuthWebView extends StatelessWidget {
   static final _log = Logger('$AuthWebView');
 
@@ -33,17 +31,13 @@ class AuthWebView extends StatelessWidget {
   }
 
   Future<ServerTrustAuthResponse?> _onReceivedServerTrustAuthRequest(
-      InAppWebViewController controller,
-      URLAuthenticationChallenge challenge) async {
+      InAppWebViewController controller, URLAuthenticationChallenge challenge) async {
     final trusted = challenge.protectionSpace.host.endsWith('kaufland.com');
-    final action = trusted
-        ? ServerTrustAuthResponseAction.PROCEED
-        : ServerTrustAuthResponseAction.CANCEL;
+    final action = trusted ? ServerTrustAuthResponseAction.PROCEED : ServerTrustAuthResponseAction.CANCEL;
     return ServerTrustAuthResponse(action: action);
   }
 
-  Future<void> _loadError(InAppWebViewController controller, Uri? url, int code,
-      String message) async {
+  Future<void> _loadError(InAppWebViewController controller, Uri? url, int code, String message) async {
     if (url == null) return;
     if (_isRedirectUrl(url)) {
       onSuccess();
