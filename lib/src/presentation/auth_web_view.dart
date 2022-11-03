@@ -22,22 +22,31 @@ class AuthWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<Uri>(
       future: repository.generateAuthRequestUrl(type),
-      builder: (context, snapshot) => InAppWebView(
-        initialUrlRequest: URLRequest(url: snapshot.data),
-        onLoadError: _loadError,
-        onReceivedServerTrustAuthRequest: _onReceivedServerTrustAuthRequest,
-      ),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return InAppWebView(
+          initialUrlRequest: URLRequest(url: snapshot.data),
+          onLoadError: _loadError,
+          onReceivedServerTrustAuthRequest: _onReceivedServerTrustAuthRequest,
+        );
+      },
     );
   }
 
   Future<ServerTrustAuthResponse?> _onReceivedServerTrustAuthRequest(
-      InAppWebViewController controller, URLAuthenticationChallenge challenge) async {
+      InAppWebViewController controller,
+      URLAuthenticationChallenge challenge) async {
     final trusted = challenge.protectionSpace.host.endsWith('kaufland.com');
-    final action = trusted ? ServerTrustAuthResponseAction.PROCEED : ServerTrustAuthResponseAction.CANCEL;
+    final action = trusted
+        ? ServerTrustAuthResponseAction.PROCEED
+        : ServerTrustAuthResponseAction.CANCEL;
     return ServerTrustAuthResponse(action: action);
   }
 
-  Future<void> _loadError(InAppWebViewController controller, Uri? url, int code, String message) async {
+  Future<void> _loadError(InAppWebViewController controller, Uri? url, int code,
+      String message) async {
     if (url == null) return;
     if (_isRedirectUrl(url)) {
       onSuccess();
