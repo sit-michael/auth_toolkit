@@ -49,7 +49,12 @@ class AuthWebView extends StatelessWidget {
       String message) async {
     if (url == null) return;
     if (_isRedirectUrl(url)) {
+      _log.info('✅ Recognized redirect after login success');
+      final code = url.queryParameters['code'];
+      final state = url.queryParameters['state'];
+      await repository.finishLogin(code ?? '', state ?? '');
       onSuccess();
+      return;
     }
     _log.info('💥 Load error: $code, $url, $message');
   }
