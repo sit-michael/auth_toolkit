@@ -19,18 +19,20 @@ class AuthRepositoryFactory {
   final String clientId;
   final String host;
   final String bundleId;
+  final Future<void> Function(Dio)? addPinnedCertificates;
 
   AuthRepositoryFactory({
     required this.clientId,
     required this.host,
     required this.bundleId,
+    this.addPinnedCertificates,
   });
 
-  AuthRepository build() {
+  Future<AuthRepository> build() async {
     final config =
         AuthConfig(host: host, clientId: clientId, redirectUri: '$bundleId://');
     final LocalDataSource local = _buildLocalDataSource();
-    final RemoteDataSource remote = _buildRemoteDataSource(config);
+    final RemoteDataSource remote = await _buildRemoteDataSource(config);
     final PkceGenerator pkceGenerator = PkceGenerator();
 
     return AuthRepositoryImpl(
@@ -46,12 +48,13 @@ class AuthRepositoryFactory {
     return LocalDataSourceImpl(storage: storage, bundleId: bundleId);
   }
 
-  RemoteDataSource _buildRemoteDataSource(AuthConfig config) {
+  Future<RemoteDataSource> _buildRemoteDataSource(AuthConfig config) async {
     final dioOptions = BaseOptions(
       baseUrl: 'https://$host',
       connectTimeout: 4000,
     );
     final dio = Dio(dioOptions);
+    await addPinnedCertificates?.call(dio);
 
     return RemoteDataSourceImpl(config: config, dio: dio);
   }
