@@ -22,8 +22,6 @@ class AuthRepositoryFactory {
   final String _host;
   String _bundleId;
   final void Function(Dio)? _addPinnedCertificates;
-  String get _redirectUri => '$_bundleId://';
-
 
   AuthRepositoryFactory({
     required String clientId,
@@ -43,8 +41,8 @@ class AuthRepositoryFactory {
   }
 
   AuthRepository build() {
-    final config =
-        AuthConfig(host: _host, clientId: _clientId, redirectUri: _redirectUri);
+    final config = AuthConfig(
+        host: _host, clientId: _clientId, redirectUri: _generateRedirectUri());
     final LocalDataSource local = _buildLocalDataSource();
     final RemoteDataSource remote = _buildRemoteDataSource(config);
     final PkceGenerator pkceGenerator = PkceGenerator();
@@ -55,6 +53,12 @@ class AuthRepositoryFactory {
       remote: remote,
       pkceGenerator: pkceGenerator,
     );
+  }
+
+  String _generateRedirectUri() {
+    String uri = '$_bundleId://';
+    uri = uri.replaceAll('_', '-');
+    return uri;
   }
 
   LocalDataSource _buildLocalDataSource() {
