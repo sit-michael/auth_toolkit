@@ -7,9 +7,7 @@ import 'package:auth_toolkit/src/data/data_source/remote_data_source.dart';
 import 'package:auth_toolkit/src/data/repository/auth_repository_impl.dart';
 import 'package:auth_toolkit/src/domain/repository/auth_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 export './src/core/model/salutation.dart';
 export './src/domain/repository/auth_repository.dart';
@@ -20,25 +18,18 @@ export './src/presentation/auth_web_view.dart';
 class AuthRepositoryFactory {
   final String _clientId;
   final String _host;
-  String _bundleId;
+  final String _bundleId;
   final void Function(Dio)? _addPinnedCertificates;
 
   AuthRepositoryFactory({
     required String clientId,
     required String host,
-    String? bundleId,
+    required String bundleId,
     void Function(Dio)? addPinnedCertificates,
-  })  : _bundleId = bundleId ?? '',
+  })  : _bundleId = bundleId,
         _clientId = clientId,
         _host = host,
         _addPinnedCertificates = addPinnedCertificates;
-
-  Future<AuthRepositoryFactory> setBundleIdFromPlatformInfo() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    _bundleId = packageInfo.packageName;
-    return this;
-  }
 
   AuthRepository build() {
     final config = AuthConfig(
