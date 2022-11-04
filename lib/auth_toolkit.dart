@@ -18,20 +18,22 @@ export './src/domain/entity/view_type.dart';
 export './src/presentation/auth_web_view.dart';
 
 class AuthRepositoryFactory {
-  final String clientId;
-  final String host;
+  final String _clientId;
+  final String _host;
   String _bundleId;
-  final void Function(Dio)? addPinnedCertificates;
+  final void Function(Dio)? _addPinnedCertificates;
+  String get _redirectUri => '$_bundleId://';
 
-  String get bundleId => _bundleId;
-  String get redirectUri => '$bundleId://';
 
   AuthRepositoryFactory({
-    required this.clientId,
-    required this.host,
+    required String clientId,
+    required String host,
     String? bundleId,
-    this.addPinnedCertificates,
-  }) : _bundleId = bundleId ?? '';
+    void Function(Dio)? addPinnedCertificates,
+  })  : _bundleId = bundleId ?? '',
+        _clientId = clientId,
+        _host = host,
+        _addPinnedCertificates = addPinnedCertificates;
 
   Future<AuthRepositoryFactory> setBundleIdFromPlatformInfo() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +44,7 @@ class AuthRepositoryFactory {
 
   AuthRepository build() {
     final config =
-        AuthConfig(host: host, clientId: clientId, redirectUri: redirectUri);
+        AuthConfig(host: _host, clientId: _clientId, redirectUri: _redirectUri);
     final LocalDataSource local = _buildLocalDataSource();
     final RemoteDataSource remote = _buildRemoteDataSource(config);
     final PkceGenerator pkceGenerator = PkceGenerator();
@@ -57,16 +59,16 @@ class AuthRepositoryFactory {
 
   LocalDataSource _buildLocalDataSource() {
     const storage = FlutterSecureStorage();
-    return LocalDataSourceImpl(storage: storage, bundleId: bundleId);
+    return LocalDataSourceImpl(storage: storage, bundleId: _bundleId);
   }
 
   RemoteDataSource _buildRemoteDataSource(AuthConfig config) {
     final dioOptions = BaseOptions(
-      baseUrl: 'https://$host',
+      baseUrl: 'https://$_host',
       connectTimeout: 4000,
     );
     final dio = Dio(dioOptions);
-    addPinnedCertificates?.call(dio);
+    _addPinnedCertificates?.call(dio);
 
     return RemoteDataSourceImpl(config: config, dio: dio);
   }
