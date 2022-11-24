@@ -9,6 +9,7 @@ class AuthWebView extends StatefulWidget {
 
   final ViewType type;
   final AuthRepository repository;
+  final Widget? loadingScreen;
 
   final VoidCallback onSuccess;
 
@@ -16,6 +17,7 @@ class AuthWebView extends StatefulWidget {
     required this.type,
     required this.repository,
     required this.onSuccess,
+    this.loadingScreen,
     Key? key,
   }) : super(key: key);
 
@@ -32,7 +34,8 @@ class _AuthWebViewState extends State<AuthWebView> {
       future: widget.repository.generateAuthRequestUrl(widget.type),
       builder: (context, snapshot) {
         if (!snapshot.hasData || _hideRedirect) {
-          return const Center(child: CircularProgressIndicator());
+          return widget.loadingScreen ??
+              const Center(child: CircularProgressIndicator());
         }
         return InAppWebView(
           initialUrlRequest: URLRequest(url: snapshot.data),
@@ -77,10 +80,12 @@ class _AuthWebViewState extends State<AuthWebView> {
   }
 
   bool _isRedirectUrl(Uri url) {
-    if (url.scheme != widget.repository.config.redirectUri.split(':')[0])
+    if (url.scheme != widget.repository.config.redirectUri.split(':')[0]) {
       return false;
-    if (url.host != widget.repository.config.redirectUri.split('/').last)
+    }
+    if (url.host != widget.repository.config.redirectUri.split('/').last) {
       return false;
+    }
     if (url.queryParameters['code'] == null) return false;
     if (url.queryParameters['state'] == null) return false;
 
