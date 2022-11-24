@@ -51,7 +51,13 @@ class AuthRepositoryFactory {
   }
 
   LocalDataSource _buildLocalDataSource() {
-    const storage = FlutterSecureStorage();
+    final storage = FlutterSecureStorage(
+      aOptions: AndroidOptions(
+        preferencesKeyPrefix: _bundleId,
+        sharedPreferencesName: _bundleId,
+        encryptedSharedPreferences: true,
+      ),
+    );
     return LocalDataSourceImpl(storage: storage, bundleId: _bundleId);
   }
 
