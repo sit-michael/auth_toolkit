@@ -8,6 +8,10 @@ import 'src/data/export.dart';
 import 'src/domain/export.dart';
 
 export 'src/domain/repository/auth_repository.dart';
+export 'src/domain/entity/auth_user.dart';
+export 'src/core/model/salutation.dart';
+export 'src/domain/entity/view_type.dart';
+export 'src/presentation/auth_web_view.dart';
 
 class AuthRepositoryFactory {
   final String _clientId;
