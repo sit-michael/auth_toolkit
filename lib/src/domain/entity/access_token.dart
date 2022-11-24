@@ -1,4 +1,5 @@
-import '../../core/model/salutation.dart';
+
+import '../../core/export.dart';
 
 class AccessToken {
   final DateTime expirationTime;

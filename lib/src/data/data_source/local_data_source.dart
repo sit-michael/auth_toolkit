@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../model/access_token_model.dart';
+import '../export.dart';
 
 abstract class LocalDataSource {
   Future<AccessTokenModel?> getAuthInfo();

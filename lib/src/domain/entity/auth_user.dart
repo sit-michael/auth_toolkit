@@ -1,6 +1,6 @@
-import 'package:auth_toolkit/src/domain/entity/access_token.dart';
 
-import '../../core/model/salutation.dart';
+import '../../core/export.dart';
+import '../export.dart';
 
 class AuthUser {
   final String authId;

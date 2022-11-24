@@ -1,7 +1,10 @@
-import 'package:auth_toolkit/auth_toolkit.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:logging/logging.dart';
+
+import '../domain/export.dart';
+
 
 class AuthWebView extends StatelessWidget {
   static final _log = Logger('$AuthWebView');

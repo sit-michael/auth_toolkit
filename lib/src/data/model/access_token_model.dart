@@ -1,7 +1,6 @@
-import 'package:auth_toolkit/src/core/model/salutation.dart';
 
-import '../../core/data_model_builder.dart';
-import '../../domain/entity/access_token.dart';
+import '../../core/export.dart';
+import '../../domain/export.dart';
 
 class AccessTokenModel extends DataModelBuilder<AccessToken> {
   final int expirationTime;

@@ -1,16 +1,10 @@
-import 'package:auth_toolkit/src/core/auth_config.dart';
-import 'package:auth_toolkit/src/data/data_source/local_data_source.dart';
-import 'package:auth_toolkit/src/data/data_source/remote_data_source.dart';
-import 'package:auth_toolkit/src/data/model/access_token_model.dart';
-import 'package:auth_toolkit/src/domain/entity/auth_user.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logging/logging.dart';
 
-import '../../core/pkce/pkce_generator.dart';
-import '../../core/random_string_generator.dart';
-import '../../domain/entity/view_type.dart';
-import '../../domain/repository/auth_repository.dart';
-import '../model/response_token_body.dart';
+import '../../core/export.dart';
+import '../../domain/export.dart';
+import '../export.dart';
+
 
 class AuthRepositoryImpl extends AuthRepository {
   final Logger _log = Logger('$AuthRepository');
@@ -155,7 +149,7 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<void> _storeAccessTokenInfo(String accessToken) async {
     final json = JwtDecoder.decode(accessToken);
     final tokenInfo = AccessTokenModel.fromJson(json);
-    _local.putAuthInfo(tokenInfo);
+    await _local.putAuthInfo(tokenInfo);
   }
 
   Future<void> _clearLocalDataSource() async {

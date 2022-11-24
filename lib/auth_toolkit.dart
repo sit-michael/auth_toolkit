@@ -1,19 +1,11 @@
 library auth_toolkit;
 
-import 'package:auth_toolkit/src/core/auth_config.dart';
-import 'package:auth_toolkit/src/core/pkce/pkce_generator.dart';
-import 'package:auth_toolkit/src/data/data_source/local_data_source.dart';
-import 'package:auth_toolkit/src/data/data_source/remote_data_source.dart';
-import 'package:auth_toolkit/src/data/repository/auth_repository_impl.dart';
-import 'package:auth_toolkit/src/domain/repository/auth_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-export './src/core/model/salutation.dart';
-export './src/domain/repository/auth_repository.dart';
-export './src/domain/entity/auth_user.dart';
-export './src/domain/entity/view_type.dart';
-export './src/presentation/auth_web_view.dart';
+import 'src/core/export.dart';
+import 'src/data/export.dart';
+import 'src/domain/export.dart';
 
 class AuthRepositoryFactory {
   final String _clientId;

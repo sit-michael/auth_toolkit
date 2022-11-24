@@ -1,7 +1,7 @@
-import 'package:auth_toolkit/src/core/auth_config.dart';
 
-import '../entity/auth_user.dart';
-import '../entity/view_type.dart';
+
+import '../../core/export.dart';
+import '../export.dart';
 
 abstract class AuthRepository {
   AuthConfig get config;
