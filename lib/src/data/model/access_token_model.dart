@@ -50,7 +50,7 @@ class AccessTokenModel extends DataModelBuilder<AccessToken> {
 extension AccessTokenModelExtension on AccessTokenModel {
   bool isTokenValid() {
     final bufferTimestamp = DateTime.now().add(const Duration(minutes: 1));
-    final expirationLimit = bufferTimestamp.millisecondsSinceEpoch;
-    return expirationLimit > expirationTime;
+    final expirationLimit = bufferTimestamp.millisecondsSinceEpoch / 1000;
+    return expirationLimit < expirationTime;
   }
 }
