@@ -49,7 +49,8 @@ class _AuthWebViewState extends State<AuthWebView> {
   Future<ServerTrustAuthResponse?> _onReceivedServerTrustAuthRequest(
       InAppWebViewController controller,
       URLAuthenticationChallenge challenge) async {
-    final trusted = challenge.protectionSpace.host.endsWith('kaufland.com');
+    final host = challenge.protectionSpace.host;
+    final trusted = host.endsWith('kaufland.com') || host.endsWith('cidaas.de');
     final action = trusted
         ? ServerTrustAuthResponseAction.PROCEED
         : ServerTrustAuthResponseAction.CANCEL;
